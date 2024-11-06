@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simba Lab API</title>
+</head>
+<body>
+    <h1>Simba Lab API Interface</h1>
+    
+    <h2>Register Member</h2>
+    <form action="/member_register" method="post">
+        <label for="member_name">Member Name:</label>
+        <input type="text" id="member_name" name="member_name" required><br>
+        <label for="member_id">Member ID:</label>
+        <input type="text" id="member_id" name="member_id" required><br>
+        <input type="submit" value="Register Member">
+    </form>
+
+    <h2>Add New Book</h2>
+    <form action="/new_book" method="post">
+        <label for="book_name">Book Name:</label>
+        <input type="text" id="book_name" name="book_name" required><br>
+        <label for="ISBN">ISBN:</label>
+        <input type="text" id="ISBN" name="ISBN" required><br>
+        <input type="submit" value="Add Book">
+    </form>
+
+    <h2>Get Book</h2>
+    <form action="/get_book" method="get">
+        <label for="ISBN">ISBN:</label>
+        <input type="text" id="ISBN" name="ISBN" required><br>
+        <input type="submit" value="Get Book">
+    </form>
+</body>
+</html>

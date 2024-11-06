@@ -1,11 +1,19 @@
 import requests
 import json
 import base64
+from flask import Flask
 
 base_url = "https://simba-sbx-api.blocks.simbachain.com/"
-def get_token(): #client_id, client_secret
+token = ""
+
+simba_lab = Flask(__name__)
+
+@simba_lab.route('/')
+
+def get_token(client_id, client_secret): #
     endpoint = '/o/token/'
-    client = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv:0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
+    client = f"{client_id}:{client_secret}"
+    #client = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv:0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
     encoded_credentials = base64.b64encode(client.encode()).decode()
 
     headers = {
@@ -18,6 +26,8 @@ def get_token(): #client_id, client_secret
     }
     response = requests.post(base_url + endpoint, headers=headers, data=data)
     access_token = response.json()['access_token']
+    globals.token = access_token
+
     return(access_token)
 
 def member_register(member_name, member_id): 
@@ -116,5 +126,17 @@ def get_book(ISBN):
     response = requests.get(base_url + endpoint, headers=headers)
     return(response.json()) # Later specify the return
 
-rep = get_book("ABCDEFG")
-print(rep)
+def get_member(member_id):
+    token = get_token()
+    endpoint = f"v2/apps/IST408-608_simba_lab/contract/simba_lab/get_member/?member_id={member_id}"
+
+    headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+    }
+
+    response = requests.get(base_url + endpoint, headers=headers)
+    return(response.json()) # Later specify the return
+
+if __name__ == '__main__':
+    simba_lab.run(debug=True)
