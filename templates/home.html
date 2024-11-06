@@ -26,35 +26,35 @@
         <div id="function-sections" style="display: none;">
             <h2>Register Member</h2>
             <form onsubmit="registerMember(event)" class="mb-4">
-                <input type="text" id="member_name" class="form-control" placeholder="Member Name" required>
-                <input type="text" id="member_id" class="form-control mt-2" placeholder="Member ID" required>
+                <input type="text" id="reg_member_name" class="form-control" placeholder="Member Name" required>
+                <input type="text" id="reg_member_id" class="form-control mt-2" placeholder="Member ID" required>
                 <button type="submit" class="btn btn-success mt-2">Register Member</button>
             </form>
 
             <h2>Member Deactive</h2>
             <form onsubmit="deactiveMember(event)" class="mb-4">
-                <input type="text" id="member_id" class="form-control" placeholder="Member ID" required>
+                <input type="text" id="dac_member_id" class="form-control" placeholder="Member ID" required>
                 <button type="submit" class="btn btn-success mt-2">Add Book</button>
             </form>
 
             <h2>Add New Book</h2>
             <form onsubmit="addNewBook(event)" class="mb-4">
-                <input type="text" id="book_name" class="form-control" placeholder="Book Name" required>
-                <input type="text" id="ISBN" class="form-control mt-2" placeholder="ISBN" required>
+                <input type="text" id="add_book_name" class="form-control" placeholder="Book Name" required>
+                <input type="text" id="add_ISBN" class="form-control mt-2" placeholder="ISBN" required>
                 <button type="submit" class="btn btn-success mt-2">Add Book</button>
             </form>
 
             <h2>Borrow Book</h2>
             <form onsubmit="borrowBook(event)" class="mb-4">
-                <input type="text" id="member_id" class="form-control" placeholder="Member ID" required>
-                <input type="text" id="ISBN" class="form-control mt-2" placeholder="ISBN" required>
+                <input type="text" id="bor_member_id" class="form-control" placeholder="Member ID" required>
+                <input type="text" id="bor_ISBN" class="form-control mt-2" placeholder="ISBN" required>
                 <button type="submit" class="btn btn-success mt-2">Add Book</button>
             </form>
 
             <h2>Return Book</h2>
             <form onsubmit="returnBook(event)" class="mb-4">
-                <input type="text" id="member_id" class="form-control" placeholder="Member ID" required>
-                <input type="text" id="ISBN" class="form-control mt-2" placeholder="ISBN" required>
+                <input type="text" id="ret_member_id" class="form-control" placeholder="Member ID" required>
+                <input type="text" id="ret_ISBN" class="form-control mt-2" placeholder="ISBN" required>
                 <button type="submit" class="btn btn-success mt-2">Add Book</button>
             </form>
 
@@ -66,7 +66,7 @@
 
             <h2>Get Member</h2>
             <form onsubmit="getMember(event)" class="mb-4">
-                <input type="text" id="member_id" class="form-control" placeholder="Member ID" required>
+                <input type="text" id="member_id_query" class="form-control" placeholder="Member ID" required>
                 <button type="submit" class="btn btn-success mt-2">Get Member</button>
             </form>
         </div>
@@ -95,8 +95,8 @@
 
         function registerMember(event) {
             event.preventDefault();
-            const memberName = document.getElementById("member_name").value;
-            const memberId = document.getElementById("member_id").value;
+            const memberName = document.getElementById("reg_member_name").value;
+            const memberId = document.getElementById("reg_member_id").value;
             
             axios.post('/api/member_register', {
                 token: token,
@@ -111,7 +111,7 @@
 
         function deactiveMember(event) {
             event.preventDefault();
-            const memberId = document.getElementById("member_id").value;
+            const memberId = document.getElementById("dac_member_id").value;
             
             axios.post('/api/member_deactive', {
                 token: token,
@@ -125,8 +125,8 @@
 
         function addNewBook(event) {
             event.preventDefault();
-            const bookName = document.getElementById("book_name").value;
-            const isbn = document.getElementById("ISBN").value;
+            const bookName = document.getElementById("add_book_name").value;
+            const isbn = document.getElementById("add_ISBN").value;
             
             axios.post('/api/new_book', {
                 token: token,
@@ -141,8 +141,8 @@
 
         function borrowBook(event) {
             event.preventDefault();
-            const memberId = document.getElementById("member_id").value;
-            const isbn = document.getElementById("ISBN").value;
+            const memberId = document.getElementById("bor_member_id").value;
+            const isbn = document.getElementById("bor_ISBN").value;
             
             axios.post('/api/borrow_book', {
                 token: token,
@@ -157,8 +157,8 @@
 
         function returnBook(event) {
             event.preventDefault();
-            const memberId = document.getElementById("member_id").value;
-            const isbn = document.getElementById("ISBN").value;
+            const memberId = document.getElementById("ret_member_id").value;
+            const isbn = document.getElementById("ret_ISBN").value;
             
             axios.post('/api/return_book', {
                 token: token,
@@ -186,7 +186,7 @@
 
         function getMember(event) {
             event.preventDefault();
-            const memberId = document.getElementById("member_id").value;
+            const memberId = document.getElementById("member_id_query").value;
             
             axios.get(`/api/get_member?member_id=${memberId}`, {
                 headers: { Authorization: `Bearer ${token}` }
