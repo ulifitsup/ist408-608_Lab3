@@ -6,11 +6,13 @@ app = Flask(__name__)
 
 # Base URL and client credentials
 base_url = "https://simba-sbx-api.blocks.simbachain.com/"
-client_id = "YOUR_CLIENT_ID"
-client_secret = "YOUR_CLIENT_SECRET"
+client_id = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv"
+client_secret = "0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
+token = ""
 
 # Function to get token
-def get_token():
+#@app.route('/')
+def get_token(): #
     endpoint = '/o/token/'
     client = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(client.encode()).decode()
@@ -28,11 +30,16 @@ def get_token():
 def home():
     return render_template('home.html')  # Render a homepage with options
 
-@app.route('/member_register', methods=['POST'])
-def member_register():
+@app.route('/api/get_token', methods=['POST'])
+def api_get_token():
     token = get_token()
-    member_name = request.form.get("member_name")
-    member_id = request.form.get("member_id")
+    return jsonify({"access_token": token})
+
+@app.route('/api/member_register', methods=['POST'])
+def api_member_register():
+    token = request.json.get("token")
+    member_name = request.json.get("member_name")
+    member_id = request.json.get("member_id")
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -42,11 +49,11 @@ def member_register():
     response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/member_register/", headers=headers, json=data)
     return jsonify(response.json())
 
-@app.route('/new_book', methods=['POST'])
-def new_book():
-    token = get_token()
-    book_name = request.form.get("book_name")
-    ISBN = request.form.get("ISBN")
+@app.route('/api/new_book', methods=['POST'])
+def api_new_book():
+    token = request.json.get("token")
+    book_name = request.json.get("book_name")
+    ISBN = request.json.get("ISBN")
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -56,9 +63,9 @@ def new_book():
     response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/new_book/", headers=headers, json=data)
     return jsonify(response.json())
 
-@app.route('/get_book', methods=['GET'])
-def get_book():
-    token = get_token()
+@app.route('/api/get_book', methods=['GET'])
+def api_get_book():
+    token = request.headers.get("Authorization")
     ISBN = request.args.get("ISBN")
 
     headers = {
@@ -67,8 +74,6 @@ def get_book():
     }
     response = requests.get(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/get_book/?ISBN={ISBN}", headers=headers)
     return jsonify(response.json())
-
-# More routes for other endpoints can be added here...
 
 if __name__ == '__main__':
     app.run(debug=True)
