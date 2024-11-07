@@ -49,6 +49,7 @@ def api_member_register():
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
+    print(f"{base_url}{base_endpoint}member_register/")
     data = {"name": member_name, "member_id": member_id}
     response = requests.post(f"{base_url}{base_endpoint}member_register/", headers=headers, json=data)
     return jsonify(response.json())

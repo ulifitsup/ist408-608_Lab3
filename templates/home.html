@@ -80,7 +80,7 @@
     <script>
         let token = "";
 
-        function authToken(event) {
+        async function authToken(event) {
             event.preventDefault();
             const clientId = document.getElementById("client_id").value;
             const clientSecret = document.getElementById("client_secret").value;
@@ -117,7 +117,7 @@
             });
         }
 
-        function registerMember(event) {
+        async function registerMember(event) {
             event.preventDefault();
             const memberName = document.getElementById("reg_member_name").value;
             const memberId = document.getElementById("reg_member_id").value;
@@ -127,13 +127,13 @@
                 member_name: memberName,
                 member_id: memberId
             }).then(response => {
-                alert("Member", member_name, member_id, " registered successfully!");
+                alert(`Member ${memberName}, ${memberId}, registered successfully!`);
             }).catch(error => {
                 console.error("Error registering member:", error);
             });
         }
 
-        function deactiveMember(event) {
+        async function deactiveMember(event) {
             event.preventDefault();
             const memberId = document.getElementById("dac_member_id").value;
             
@@ -141,7 +141,7 @@
                 token: token,
                 member_id: memberId
             }).then(response => {
-                alert("Member deactivated successfully!");
+                alert(`Member ${memberId} deactivated successfully!`);
             }).catch(error => {
                 console.error("Error deactivating member:", error);
             });
@@ -157,13 +157,13 @@
                 book_name: bookName,
                 ISBN: isbn
             }).then(response => {
-                alert("Book added successfully!");
+                alert(`Book ${isbn} added successfully!`);
             }).catch(error => {
                 console.error("Error adding book:", error);
             });
         }
 
-        function borrowBook(event) {
+        async function borrowBook(event) {
             event.preventDefault();
             const memberId = document.getElementById("bor_member_id").value;
             const isbn = document.getElementById("bor_ISBN").value;
@@ -173,13 +173,13 @@
                 member_id: memberId,
                 ISBN: isbn
             }).then(response => {
-                alert("Book borrowed successfully!");
+                alert(`Book ${isbn} borrowed by ${memberId} successfully!`);
             }).catch(error => {
                 console.error("Error borrowing book:", error);
             });
         }
 
-        function returnBook(event) {
+        async function returnBook(event) {
             event.preventDefault();
             const memberId = document.getElementById("ret_member_id").value;
             const isbn = document.getElementById("ret_ISBN").value;
@@ -189,13 +189,13 @@
                 member_id: memberId,
                 ISBN: isbn
             }).then(response => {
-                alert("Book returned successfully!");
+                alert(`Book ${isbn} returned by ${memberId} successfully!`);
             }).catch(error => {
                 console.error("Error returning book:", error);
             });
         }
 
-        function getBook(event) {
+        async function getBook(event) {
             event.preventDefault();
             const isbnQuery = document.getElementById("isbn_query").value;
             
@@ -208,7 +208,7 @@
             });
         }
 
-        function getMember(event) {
+        async function getMember(event) {
             event.preventDefault();
             const memberId = document.getElementById("member_id_query").value;
             
