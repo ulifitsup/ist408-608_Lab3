@@ -6,12 +6,11 @@ app = Flask(__name__)
 
 # Base URL and client credentials
 base_url = "https://simba-sbx-api.blocks.simbachain.com/"
+base_endpoint = ""
 #client_id = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv"
 #client_secret = "0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
-token = ""
 
 # Function to get token
-#@app.route('/')
 def get_token(client_id, client_secret): #
     endpoint = '/o/token/'
     client = f"{client_id}:{client_secret}"
@@ -34,6 +33,7 @@ def home():
 def api_get_token():
     client_id = request.json.get("client_id")
     client_secret = request.json.get("client_secret")
+    baseendpoint = request.json.get("endpoint")
     
     token = get_token(client_id, client_secret)
     return jsonify({"access_token": token})
