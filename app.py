@@ -6,13 +6,13 @@ app = Flask(__name__)
 
 # Base URL and client credentials
 base_url = "https://simba-sbx-api.blocks.simbachain.com/"
-client_id = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv"
-client_secret = "0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
+#client_id = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv"
+#client_secret = "0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
 token = ""
 
 # Function to get token
 #@app.route('/')
-def get_token(): #
+def get_token(client_id, client_secret): #
     endpoint = '/o/token/'
     client = f"{client_id}:{client_secret}"
     encoded_credentials = base64.b64encode(client.encode()).decode()
@@ -32,7 +32,10 @@ def home():
 
 @app.route('/api/get_token', methods=['POST'])
 def api_get_token():
-    token = get_token()
+    client_id = request.json.get("client_id")
+    client_secret = request.json.get("client_secret")
+    
+    token = get_token(client_id, client_secret)
     return jsonify({"access_token": token})
 
 @app.route('/api/member_register', methods=['POST'])
@@ -49,6 +52,19 @@ def api_member_register():
     response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/member_register/", headers=headers, json=data)
     return jsonify(response.json())
 
+@app.route('/api/member_deactive', methods=['POST'])
+def api_member_deactive():
+    token = request.json.get("token")
+    member_id = request.json.get("member_id")
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    data = {"member_id": member_id}
+    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/member_deactive/", headers=headers, json=data)
+    return jsonify(response.json())
+
 @app.route('/api/new_book', methods=['POST'])
 def api_new_book():
     token = request.json.get("token")
@@ -63,6 +79,34 @@ def api_new_book():
     response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/new_book/", headers=headers, json=data)
     return jsonify(response.json())
 
+@app.route('/api/book_borrow', methods=['POST'])
+def api_book_borrow():
+    token = request.json.get("token")
+    member_id = request.json.get("member_id")
+    ISBN = request.json.get("ISBN")
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    data = {"member_id": member_id, "ISBN": ISBN}
+    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/borrow_book/", headers=headers, json=data)
+    return jsonify(response.json())
+
+@app.route('/api/book_return', methods=['POST'])
+def api_book_return():
+    token = request.json.get("token")
+    member_id = request.json.get("member_id")
+    ISBN = request.json.get("ISBN")
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    data = {"member_id": member_id, "ISBN": ISBN}
+    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/return_book/", headers=headers, json=data)
+    return jsonify(response.json())
+
 @app.route('/api/get_book', methods=['GET'])
 def api_get_book():
     token = request.headers.get("Authorization")
@@ -74,6 +118,20 @@ def api_get_book():
     }
     response = requests.get(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/get_book/?ISBN={ISBN}", headers=headers)
     return jsonify(response.json())
+
+@app.route('/api/get_member', methods=['GET'])
+def api_get_member():
+    token = request.headers.get("Authorization")
+    member_id = request.args.get("member_id")
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    data = {"member_id": member_id}
+    response = requests.get(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/get_member/?member_id={member_id}", headers=headers)
+    return jsonify(response.json())
+
 
 if __name__ == '__main__':
     app.run(debug=True)
