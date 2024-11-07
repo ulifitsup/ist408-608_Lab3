@@ -79,8 +79,11 @@
             event.preventDefault();
             const clientId = document.getElementById("client_id").value;
             const clientSecret = document.getElementById("client_secret").value;
-            
-            axios.post('/api/get_token')
+
+            axios.post('/api/get_token', {
+                client_id: clientId,
+                client_secret: clientSecret
+            })
                 .then(response => {
                     token = response.data.access_token;
                     document.getElementById("token-status").innerText = "Token obtained successfully!";
@@ -176,7 +179,7 @@
             const isbnQuery = document.getElementById("isbn_query").value;
             
             axios.get(`/api/get_book?ISBN=${isbnQuery}`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: token }
             }).then(response => {
                 alert("Book data: " + JSON.stringify(response.data));
             }).catch(error => {
@@ -189,7 +192,7 @@
             const memberId = document.getElementById("member_id").value;
             
             axios.get(`/api/get_member?member_id=${memberId}`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: token }
             }).then(response => {
                 alert("Member data: " + JSON.stringify(response.data));
             }).catch(error => {
