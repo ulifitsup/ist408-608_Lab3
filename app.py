@@ -5,7 +5,7 @@ import base64
 app = Flask(__name__)
 
 # Base URL and client credentials
-base_url = "https://simba-sbx-api.blocks.simbachain.com/"
+base_url = "https://simba-sbx-api.blocks.simbachain.com"
 base_endpoint = ""
 #client_id = "ckrL4IBXsep4zk0WvhTL5nR6TvBL2TQjXmuqFqTv"
 #client_secret = "0wbO8jQVVTqeloV3gp73IxC6v3iQS1ILTxR3dfdit8wutZtuK4hh1uglZN5iNqzUyU63ySvkeroXIzIIKIKZ7GlXpzLm5u4HoMQi9dDTDfcPkcw9p7LeplsVAFVcho39"
@@ -33,7 +33,8 @@ def home():
 def api_get_token():
     client_id = request.json.get("client_id")
     client_secret = request.json.get("client_secret")
-    baseendpoint = request.json.get("endpoint")
+    global base_endpoint
+    base_endpoint = request.json.get("endpoint")
     
     token = get_token(client_id, client_secret)
     return jsonify({"access_token": token})
@@ -49,7 +50,7 @@ def api_member_register():
         "Content-Type": "application/json"
     }
     data = {"name": member_name, "member_id": member_id}
-    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/member_register/", headers=headers, json=data)
+    response = requests.post(f"{base_url}{base_endpoint}member_register/", headers=headers, json=data)
     return jsonify(response.json())
 
 @app.route('/api/member_deactive', methods=['POST'])
@@ -62,7 +63,7 @@ def api_member_deactive():
         "Content-Type": "application/json"
     }
     data = {"member_id": member_id}
-    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/member_deactive/", headers=headers, json=data)
+    response = requests.post(f"{base_url}{base_endpoint}member_deactive/", headers=headers, json=data)
     return jsonify(response.json())
 
 @app.route('/api/new_book', methods=['POST'])
@@ -76,7 +77,7 @@ def api_new_book():
         "Content-Type": "application/json"
     }
     data = {"book_name": book_name, "ISBN": ISBN}
-    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/new_book/", headers=headers, json=data)
+    response = requests.post(f"{base_url}{base_endpoint}new_book/", headers=headers, json=data)
     return jsonify(response.json())
 
 @app.route('/api/book_borrow', methods=['POST'])
@@ -90,7 +91,7 @@ def api_book_borrow():
         "Content-Type": "application/json"
     }
     data = {"member_id": member_id, "ISBN": ISBN}
-    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/borrow_book/", headers=headers, json=data)
+    response = requests.post(f"{base_url}{base_endpoint}borrow_book/", headers=headers, json=data)
     return jsonify(response.json())
 
 @app.route('/api/book_return', methods=['POST'])
@@ -104,7 +105,7 @@ def api_book_return():
         "Content-Type": "application/json"
     }
     data = {"member_id": member_id, "ISBN": ISBN}
-    response = requests.post(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/return_book/", headers=headers, json=data)
+    response = requests.post(f"{base_url}{base_endpoint}return_book/", headers=headers, json=data)
     return jsonify(response.json())
 
 @app.route('/api/get_book', methods=['GET'])
@@ -116,7 +117,7 @@ def api_get_book():
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
     }
-    response = requests.get(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/get_book/?ISBN={ISBN}", headers=headers)
+    response = requests.get(f"{base_url}{base_endpoint}get_book/?ISBN={ISBN}", headers=headers)
     return jsonify(response.json())
 
 @app.route('/api/get_member', methods=['GET'])
@@ -129,7 +130,7 @@ def api_get_member():
         "Content-Type": "application/json"
     }
     data = {"member_id": member_id}
-    response = requests.get(f"{base_url}v2/apps/IST408-608_simba_lab/contract/simba_lab/get_member/?member_id={member_id}", headers=headers)
+    response = requests.get(f"{base_url}{base_endpoint}get_member/?member_id={member_id}", headers=headers)
     return jsonify(response.json())
 
 
